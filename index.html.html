@@ -1,0 +1,928 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>United We Stance — Orlando Car Movement</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Anton&family=Archivo:wght@500;600;700;800&family=Inter:wght@400;500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet" />
+<style>
+  :root{
+    --ink:#08080a;
+    --ink-2:#0e0e12;
+    --card:#15151b;
+    --card-2:#1c1c24;
+    --line:rgba(255,255,255,.08);
+    --line-2:rgba(245,197,24,.22);
+    --gold:#f5c518;
+    --gold-2:#ffd64a;
+    --gold-deep:#a9790a;
+    --white:#f5f4f1;
+    --muted:#9a9aa4;
+    --green:#39d98a;
+    --red:#ff5d5d;
+    --amber:#ffb020;
+    --glow:0 0 0 1px rgba(245,197,24,.25), 0 18px 50px -12px rgba(245,197,24,.35);
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{scroll-behavior:smooth;scroll-padding-top:74px}
+  body{
+    background:var(--ink);
+    color:var(--white);
+    font-family:'Inter',system-ui,sans-serif;
+    line-height:1.55;
+    -webkit-font-smoothing:antialiased;
+    overflow-x:hidden;
+  }
+  body::before{
+    content:"";position:fixed;inset:0;z-index:0;pointer-events:none;
+    background:
+      radial-gradient(900px 500px at 78% -8%, rgba(245,197,24,.10), transparent 60%),
+      radial-gradient(700px 480px at -5% 18%, rgba(245,197,24,.05), transparent 55%);
+  }
+  a{color:inherit;text-decoration:none}
+  img{max-width:100%;display:block}
+  .wrap{width:min(1180px,92vw);margin-inline:auto;position:relative;z-index:1}
+  .eyebrow{
+    font-family:'Space Mono',monospace;letter-spacing:.32em;text-transform:uppercase;
+    font-size:.66rem;color:var(--gold);
+  }
+  .display{font-family:'Anton',sans-serif;text-transform:uppercase;line-height:.92;letter-spacing:.005em;font-weight:400}
+  .section{padding:84px 0;position:relative;z-index:1}
+  .section--alt{background:linear-gradient(180deg,var(--ink-2),var(--ink))}
+  .sec-head{max-width:640px;margin-bottom:42px}
+  .sec-head h2{font-size:clamp(2rem,5.6vw,3.3rem);margin:14px 0 12px}
+  .sec-head p{color:var(--muted);font-size:1.02rem}
+  .gold{color:var(--gold)}
+
+  /* buttons */
+  .btn{
+    display:inline-flex;align-items:center;gap:.5rem;justify-content:center;
+    font-weight:700;font-size:.95rem;border-radius:11px;padding:13px 22px;cursor:pointer;
+    border:1px solid transparent;transition:transform .15s ease, box-shadow .2s ease, background .2s ease;
+    font-family:'Archivo',sans-serif;letter-spacing:.01em;
+  }
+  .btn:active{transform:translateY(1px)}
+  .btn-gold{background:linear-gradient(180deg,var(--gold-2),var(--gold));color:#181200;box-shadow:0 10px 26px -10px rgba(245,197,24,.7)}
+  .btn-gold:hover{box-shadow:0 14px 34px -8px rgba(245,197,24,.9);transform:translateY(-2px)}
+  .btn-ghost{background:rgba(255,255,255,.04);border-color:var(--line);color:var(--white)}
+  .btn-ghost:hover{border-color:var(--line-2);background:rgba(245,197,24,.06)}
+  .btn-block{width:100%}
+
+  /* nav */
+  header.nav{
+    position:sticky;top:0;z-index:50;
+    background:rgba(8,8,10,.78);backdrop-filter:blur(14px);
+    border-bottom:1px solid var(--line);
+  }
+  .nav-inner{display:flex;align-items:center;justify-content:space-between;height:64px}
+  .brand{display:flex;align-items:center;gap:11px}
+  .brand .mark{
+    width:38px;height:38px;border-radius:50%;display:grid;place-items:center;
+    background:radial-gradient(circle at 50% 35%,#2a2206,#0b0b0d);
+    border:2px solid var(--gold);box-shadow:0 0 18px -4px rgba(245,197,24,.6);
+    font-family:'Anton';font-size:.95rem;color:var(--gold);letter-spacing:.02em;
+  }
+  .brand .bt{font-family:'Anton';font-size:1.02rem;letter-spacing:.04em;text-transform:uppercase;line-height:1}
+  .brand .bs{font-family:'Space Mono';font-size:.56rem;letter-spacing:.28em;color:var(--muted);text-transform:uppercase}
+  .nav-links{display:flex;gap:26px;align-items:center}
+  .nav-links a{font-size:.86rem;font-weight:600;color:var(--muted);transition:color .15s}
+  .nav-links a:hover{color:var(--white)}
+  .nav-cta{display:flex;align-items:center;gap:14px}
+  .menu-btn{display:none;background:none;border:1px solid var(--line);border-radius:9px;color:var(--white);padding:8px 11px;cursor:pointer}
+  @media(max-width:900px){
+    .nav-links{display:none}
+    .nav-cta .btn{padding:10px 15px;font-size:.85rem}
+    .menu-btn{display:inline-flex;align-items:center;gap:7px}
+  }
+  /* mobile drawer */
+  .mobile-nav{
+    display:none;position:fixed;inset:0;z-index:60;background:rgba(6,6,8,.96);
+    backdrop-filter:blur(8px);padding:84px 24px 24px;flex-direction:column;gap:6px;
+  }
+  .mobile-nav.open{display:flex;animation:pop .25s ease}
+  .mobile-nav a{
+    font-family:'Anton';text-transform:uppercase;font-size:1.5rem;letter-spacing:.02em;
+    padding:13px 4px;border-bottom:1px solid var(--line);color:var(--white);
+  }
+  .mobile-nav a.cta{margin-top:14px;border:none;text-align:center;background:linear-gradient(180deg,var(--gold-2),var(--gold));color:#181200;border-radius:11px}
+  .mobile-nav .close{position:absolute;top:18px;right:22px;background:none;border:1px solid var(--line);border-radius:9px;color:#fff;padding:9px 13px;cursor:pointer;font-size:1.1rem}
+
+  /* hero */
+  .hero{padding:62px 0 70px;position:relative;overflow:hidden}
+  .hero-grid{display:grid;grid-template-columns:1.05fr .95fr;gap:48px;align-items:center}
+  .hero h1{font-size:clamp(2.7rem,8.6vw,5.4rem);margin:18px 0}
+  .hero h1 span{color:var(--gold);display:block;text-shadow:0 0 36px rgba(245,197,24,.4)}
+  .hero p.sub{color:#cfcfd6;font-size:1.08rem;max-width:46ch;margin-bottom:26px}
+  .hero-cta{display:flex;gap:14px;flex-wrap:wrap}
+  .hero-stats{display:flex;gap:30px;margin-top:34px;flex-wrap:wrap}
+  .hero-stats .s b{font-family:'Anton';font-size:1.7rem;color:var(--white);display:block;line-height:1}
+  .hero-stats .s span{font-family:'Space Mono';font-size:.64rem;letter-spacing:.18em;color:var(--muted);text-transform:uppercase}
+
+  /* signature: glowing event pass */
+  .pass-stage{display:grid;place-items:center;perspective:1200px}
+  .pass{
+    width:min(340px,86vw);background:linear-gradient(160deg,#1b1b22,#0c0c10);
+    border:1px solid var(--line-2);border-radius:20px;overflow:hidden;
+    box-shadow:0 40px 90px -30px rgba(245,197,24,.45), inset 0 1px 0 rgba(255,255,255,.05);
+    transform:rotateY(-12deg) rotateX(5deg);transition:transform .4s ease;
+  }
+  .pass:hover{transform:rotateY(-4deg) rotateX(2deg)}
+  .pass-top{padding:18px 20px;background:linear-gradient(180deg,rgba(245,197,24,.14),transparent);border-bottom:1px dashed var(--line-2);display:flex;justify-content:space-between;align-items:center}
+  .pass-top .l{font-family:'Anton';letter-spacing:.04em;font-size:1rem;text-transform:uppercase}
+  .pass-tier{font-family:'Space Mono';font-size:.6rem;letter-spacing:.16em;color:#181200;background:var(--gold);padding:4px 9px;border-radius:6px;font-weight:700}
+  .pass-body{padding:20px}
+  .pass-row{display:flex;justify-content:space-between;font-size:.82rem;padding:7px 0;border-bottom:1px solid rgba(255,255,255,.05)}
+  .pass-row span:first-child{color:var(--muted);font-family:'Space Mono';font-size:.66rem;letter-spacing:.08em;text-transform:uppercase}
+  .pass-row span:last-child{font-weight:600}
+  .qr{width:118px;height:118px;margin:16px auto 8px;display:grid;grid-template-columns:repeat(11,1fr);grid-template-rows:repeat(11,1fr);gap:2px;background:#fff;padding:9px;border-radius:10px}
+  .qr i{background:#0a0a0a;border-radius:1px}
+  .qr i.off{background:transparent}
+  .pass-foot{text-align:center;font-family:'Space Mono';font-size:.62rem;letter-spacing:.14em;color:var(--muted);padding-bottom:18px;text-transform:uppercase}
+  .pass-notch{position:relative}
+  .pass-notch::before,.pass-notch::after{content:"";position:absolute;top:-9px;width:18px;height:18px;border-radius:50%;background:var(--ink)}
+  .pass-notch::before{left:-9px}.pass-notch::after{right:-9px}
+
+  /* marquee */
+  .marquee{border-block:1px solid var(--line);background:var(--ink-2);overflow:hidden;padding:13px 0}
+  .marquee .track{display:flex;gap:42px;white-space:nowrap;animation:scroll 26s linear infinite;font-family:'Anton';text-transform:uppercase;font-size:1.05rem;letter-spacing:.05em;color:var(--muted)}
+  .marquee .track b{color:var(--gold)}
+  @keyframes scroll{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+
+  /* events */
+  .cards{display:grid;grid-template-columns:repeat(3,1fr);gap:22px}
+  .card{
+    background:var(--card);border:1px solid var(--line);border-radius:16px;overflow:hidden;
+    display:flex;flex-direction:column;transition:transform .2s ease,border-color .2s ease,box-shadow .25s ease;
+  }
+  .card:hover{transform:translateY(-5px);border-color:var(--line-2);box-shadow:0 24px 50px -24px rgba(245,197,24,.3)}
+  .card-banner{height:140px;display:flex;align-items:flex-end;padding:16px;position:relative;background-size:cover}
+  .b1{background:linear-gradient(135deg,#241d04,#0d0d10)}
+  .b2{background:linear-gradient(135deg,#2a1430,#0d0d10)}
+  .b3{background:linear-gradient(135deg,#0c2630,#0d0d10)}
+  .card-banner::after{content:"";position:absolute;inset:0;background:repeating-linear-gradient(115deg,rgba(245,197,24,.06) 0 2px,transparent 2px 13px);pointer-events:none}
+  .pill{font-family:'Space Mono';font-size:.6rem;letter-spacing:.12em;text-transform:uppercase;padding:5px 10px;border-radius:20px;position:relative;z-index:1;font-weight:700}
+  .pill-open{background:rgba(57,217,138,.16);color:var(--green);border:1px solid rgba(57,217,138,.35)}
+  .pill-invite{background:rgba(245,197,24,.16);color:var(--gold);border:1px solid var(--line-2)}
+  .pill-apply{background:rgba(255,176,32,.16);color:var(--amber);border:1px solid rgba(255,176,32,.35)}
+  .card-body{padding:20px;display:flex;flex-direction:column;gap:10px;flex:1}
+  .card-body h3{font-family:'Anton';font-size:1.45rem;text-transform:uppercase;letter-spacing:.02em}
+  .card-meta{font-family:'Space Mono';font-size:.68rem;letter-spacing:.06em;color:var(--gold);text-transform:uppercase}
+  .card-body p{color:var(--muted);font-size:.9rem;flex:1}
+  .card-price{display:flex;align-items:baseline;gap:6px;margin-top:4px}
+  .card-price b{font-family:'Anton';font-size:1.5rem;color:var(--white)}
+  .card-price small{color:var(--muted);font-size:.74rem}
+
+  /* generic grids */
+  .two{display:grid;grid-template-columns:1.15fr .85fr;gap:36px;align-items:start}
+
+  /* form */
+  .form-card{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:28px}
+  .frow{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:16px}
+  .field{display:flex;flex-direction:column;gap:7px}
+  .field.full{grid-column:1/-1}
+  .field label{font-family:'Space Mono';font-size:.66rem;letter-spacing:.1em;text-transform:uppercase;color:var(--muted)}
+  .field input,.field select,.field textarea{
+    background:#0c0c10;border:1px solid var(--line);border-radius:10px;color:var(--white);
+    padding:12px 13px;font-family:'Inter';font-size:.92rem;transition:border-color .15s,box-shadow .15s;
+  }
+  .field input:focus,.field select:focus,.field textarea:focus{outline:none;border-color:var(--gold);box-shadow:0 0 0 3px rgba(245,197,24,.16)}
+  .field textarea{resize:vertical;min-height:84px}
+  .upload{border:1.5px dashed var(--line-2);border-radius:12px;padding:22px;text-align:center;color:var(--muted);cursor:pointer;font-size:.85rem;transition:.15s}
+  .upload:hover{background:rgba(245,197,24,.04);color:var(--white)}
+  .check{display:flex;gap:11px;align-items:flex-start;margin:6px 0 18px;font-size:.85rem;color:var(--muted)}
+  .check input{margin-top:3px;accent-color:var(--gold);width:17px;height:17px}
+  .form-note{font-family:'Space Mono';font-size:.66rem;color:var(--muted);margin-top:14px;letter-spacing:.05em}
+  .confirm{display:none;text-align:center;padding:34px 22px}
+  .confirm.show{display:block;animation:pop .35s ease}
+  @keyframes pop{from{opacity:0;transform:scale(.96)}to{opacity:1;transform:scale(1)}}
+  .confirm .ico{width:62px;height:62px;border-radius:50%;background:rgba(57,217,138,.14);border:1px solid rgba(57,217,138,.4);display:grid;place-items:center;margin:0 auto 16px;font-size:1.7rem}
+  .confirm h3{font-family:'Anton';font-size:1.8rem;text-transform:uppercase;margin-bottom:8px}
+  .confirm p{color:var(--muted);max-width:38ch;margin:0 auto 18px}
+
+  /* payment */
+  .tiers{display:grid;grid-template-columns:repeat(5,1fr);gap:12px;margin-bottom:24px}
+  .tier{background:var(--card);border:1px solid var(--line);border-radius:13px;padding:18px 14px;cursor:pointer;text-align:center;transition:.18s;position:relative}
+  .tier:hover{border-color:var(--line-2);transform:translateY(-3px)}
+  .tier.active{border-color:var(--gold);background:linear-gradient(180deg,rgba(245,197,24,.1),var(--card));box-shadow:var(--glow)}
+  .tier .tn{font-family:'Space Mono';font-size:.62rem;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);min-height:28px}
+  .tier .tp{font-family:'Anton';font-size:1.7rem;margin-top:8px;color:var(--gold)}
+  .tier .tag{position:absolute;top:-9px;left:50%;transform:translateX(-50%);font-family:'Space Mono';font-size:.52rem;letter-spacing:.1em;background:var(--gold);color:#181200;padding:3px 8px;border-radius:6px;text-transform:uppercase;font-weight:700;white-space:nowrap}
+  .checkout{background:var(--card-2);border:1px solid var(--line-2);border-radius:16px;padding:24px}
+  .checkout h3{font-family:'Anton';font-size:1.3rem;text-transform:uppercase;margin-bottom:16px}
+  .co-row{display:flex;justify-content:space-between;padding:11px 0;border-bottom:1px solid var(--line);font-size:.92rem}
+  .co-row span:first-child{color:var(--muted)}
+  .co-total{display:flex;justify-content:space-between;align-items:center;padding:16px 0 18px}
+  .co-total b{font-family:'Anton';font-size:2rem;color:var(--gold)}
+  .pay-note{font-family:'Space Mono';font-size:.64rem;color:var(--muted);text-align:center;margin-top:13px;letter-spacing:.04em;line-height:1.7}
+  .pay-state{display:none;margin-top:14px;background:rgba(245,197,24,.08);border:1px solid var(--line-2);border-radius:10px;padding:13px;text-align:center;font-size:.85rem;color:var(--gold)}
+  .pay-state.show{display:block;animation:pop .3s ease}
+
+  /* steps how-qr + invite */
+  .steps{display:grid;grid-template-columns:repeat(5,1fr);gap:14px;counter-reset:step}
+  .step{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:22px 18px;position:relative}
+  .step .num{font-family:'Anton';font-size:2.2rem;color:var(--gold-deep);line-height:1}
+  .step h4{font-family:'Archivo';font-weight:700;font-size:1rem;margin:8px 0 6px}
+  .step p{color:var(--muted);font-size:.84rem}
+  .step::after{content:"→";position:absolute;right:-12px;top:50%;transform:translateY(-50%);color:var(--gold-deep);font-size:1.2rem;z-index:2}
+  .step:last-child::after{display:none}
+
+  /* admin dashboard */
+  .caps{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:12px;margin-bottom:26px}
+  .cap{background:var(--card);border:1px solid var(--line);border-radius:11px;padding:14px 16px;font-size:.88rem;display:flex;gap:10px;align-items:center}
+  .cap .dot{width:8px;height:8px;border-radius:50%;background:var(--gold);box-shadow:0 0 10px var(--gold);flex:none}
+  .dash{background:var(--card);border:1px solid var(--line);border-radius:16px;overflow:hidden}
+  .dash-head{display:flex;justify-content:space-between;align-items:center;padding:18px 22px;border-bottom:1px solid var(--line)}
+  .dash-head h3{font-family:'Anton';font-size:1.2rem;text-transform:uppercase}
+  .dash-head .live{font-family:'Space Mono';font-size:.62rem;color:var(--green);display:flex;align-items:center;gap:7px}
+  .dash-head .live::before{content:"";width:7px;height:7px;border-radius:50%;background:var(--green);box-shadow:0 0 8px var(--green)}
+  .tbl-scroll{overflow-x:auto}
+  table{width:100%;border-collapse:collapse;min-width:640px}
+  th{font-family:'Space Mono';font-size:.6rem;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);text-align:left;padding:13px 22px;border-bottom:1px solid var(--line);font-weight:400}
+  td{padding:14px 22px;font-size:.86rem;border-bottom:1px solid rgba(255,255,255,.04)}
+  tr:last-child td{border-bottom:none}
+  td .car{color:var(--muted);font-size:.78rem;display:block;font-family:'Space Mono'}
+  .s-pill{font-family:'Space Mono';font-size:.58rem;letter-spacing:.06em;text-transform:uppercase;padding:4px 9px;border-radius:20px;font-weight:700}
+  .s-paid{background:rgba(57,217,138,.14);color:var(--green)}
+  .s-unpaid{background:rgba(255,93,93,.14);color:var(--red)}
+  .s-appr{background:rgba(57,217,138,.14);color:var(--green)}
+  .s-wait{background:rgba(255,176,32,.14);color:var(--amber)}
+  .s-in{background:rgba(245,197,24,.16);color:var(--gold)}
+  .s-no{background:rgba(255,255,255,.06);color:var(--muted)}
+
+  /* vendor / merch / contact */
+  .vendor-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:16px;margin-bottom:30px}
+  .vcard{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:24px}
+  .vcard .vi{font-size:1.5rem;margin-bottom:10px}
+  .vcard h4{font-family:'Archivo';font-weight:700;font-size:1.05rem;margin-bottom:6px}
+  .vcard p{color:var(--muted);font-size:.86rem}
+  .merch{background:linear-gradient(135deg,rgba(245,197,24,.08),var(--card));border:1px solid var(--line-2);border-radius:18px;padding:34px;display:flex;gap:24px;align-items:center;flex-wrap:wrap;justify-content:space-between}
+  .merch .mt h3{font-family:'Anton';font-size:1.8rem;text-transform:uppercase;margin-bottom:8px}
+  .merch .mt p{color:var(--muted);max-width:52ch}
+  .merch .tags{display:flex;gap:9px;margin-top:14px;flex-wrap:wrap}
+  .merch .tags span{font-family:'Space Mono';font-size:.64rem;border:1px solid var(--line);padding:6px 11px;border-radius:20px;color:var(--muted)}
+  .contact{text-align:center;max-width:600px;margin-inline:auto}
+  .contact h2{font-size:clamp(2rem,6vw,3.2rem);margin:14px 0}
+  .contact .links{display:flex;gap:14px;justify-content:center;flex-wrap:wrap;margin-top:22px;font-family:'Space Mono';font-size:.82rem;color:var(--muted)}
+  .contact .links a{color:var(--gold)}
+  .contact-form{max-width:520px;margin:30px auto 0;text-align:left;background:var(--card);border:1px solid var(--line);border-radius:18px;padding:26px}
+  .contact-form .frow{margin-bottom:14px}
+  .contact-confirm{display:none;text-align:center;padding:20px;color:var(--green);font-weight:600}
+  .contact-confirm.show{display:block;animation:pop .3s ease}
+
+  /* footer */
+  footer{border-top:1px solid var(--line);padding:46px 0 34px;background:var(--ink-2)}
+  .foot-grid{display:flex;justify-content:space-between;gap:24px;flex-wrap:wrap;align-items:flex-start}
+  .foot-links{display:flex;gap:22px;flex-wrap:wrap;font-size:.86rem}
+  .foot-links a{color:var(--muted)}
+  .foot-links a:hover{color:var(--white)}
+  .disclaimer{margin-top:26px;font-family:'Space Mono';font-size:.62rem;color:#5e5e66;letter-spacing:.04em}
+
+  @media(max-width:900px){
+    .hero-grid{grid-template-columns:1fr;gap:34px}
+    .pass-stage{order:-1}
+    .cards{grid-template-columns:1fr}
+    .two{grid-template-columns:1fr}
+    .tiers{grid-template-columns:repeat(2,1fr)}
+    .steps{grid-template-columns:1fr}
+    .step::after{content:"↓";right:auto;left:50%;top:auto;bottom:-12px;transform:translateX(-50%)}
+    .frow{grid-template-columns:1fr}
+  }
+  @media(prefers-reduced-motion:reduce){
+    *{animation:none!important;scroll-behavior:auto!important;transition:none!important}
+  }
+  :focus-visible{outline:2px solid var(--gold);outline-offset:2px;border-radius:4px}
+
+  /* demo banner */
+  .demo-bar{
+    background:linear-gradient(90deg,rgba(245,197,24,.14),rgba(245,197,24,.04));
+    border-bottom:1px solid var(--line-2);text-align:center;
+    font-family:'Space Mono';font-size:.66rem;letter-spacing:.08em;color:var(--gold);
+    padding:9px 16px;text-transform:uppercase;position:relative;z-index:55;
+  }
+  /* sample-pricing flag reused across sections */
+  .sample-flag{
+    display:inline-flex;align-items:center;gap:7px;font-family:'Space Mono';
+    font-size:.6rem;letter-spacing:.12em;text-transform:uppercase;color:var(--amber);
+    border:1px solid rgba(255,176,32,.35);background:rgba(255,176,32,.08);
+    padding:5px 11px;border-radius:20px;margin-bottom:18px;
+  }
+  .sample-flag::before{content:"●";color:var(--amber);font-size:.6rem}
+  /* demo note blocks for payment / qr */
+  .demo-note{
+    background:rgba(245,197,24,.06);border:1px solid var(--line-2);border-radius:12px;
+    padding:15px 18px;font-size:.84rem;color:#cfcfd6;display:flex;gap:12px;align-items:flex-start;
+    margin-top:22px;line-height:1.6;
+  }
+  .demo-note .di{font-size:1.1rem;flex:none;filter:saturate(1.2)}
+  .demo-note b{color:var(--gold);font-weight:700}
+  /* policy / legal links */
+  .legal-row{display:flex;gap:10px;flex-wrap:wrap;margin-top:16px}
+  .legal-row a{
+    font-family:'Space Mono';font-size:.66rem;letter-spacing:.04em;color:var(--muted);
+    border:1px solid var(--line);border-radius:8px;padding:8px 13px;transition:.15s;
+  }
+  .legal-row a:hover{border-color:var(--line-2);color:var(--gold)}
+  /* subtle premium texture on key surfaces */
+  .hero::after{
+    content:"";position:absolute;right:-10%;top:-20%;width:520px;height:520px;border-radius:50%;
+    background:radial-gradient(circle,rgba(245,197,24,.10),transparent 65%);pointer-events:none;z-index:0;
+  }
+</style>
+</head>
+<body>
+
+<!-- DEMO BANNER -->
+<div class="demo-bar">★ Prototype Concept — Visual &amp; Functional Demo · Not the Live Production System ★</div>
+
+<!-- NAV -->
+<header class="nav">
+  <div class="wrap nav-inner">
+    <a class="brand" href="#top">
+      <div class="mark">UWS</div>
+      <div>
+        <div class="bt">United We Stance</div>
+        <div class="bs">Est. 2012 · Orlando</div>
+      </div>
+    </a>
+    <nav class="nav-links">
+      <a href="#events">Events</a>
+      <a href="#register">Register</a>
+      <a href="#tickets">QR Tickets</a>
+      <a href="#vendors">Vendors</a>
+      <a href="#contact">Contact</a>
+    </nav>
+    <div class="nav-cta">
+      <a href="#register" class="btn btn-gold">Register Now</a>
+      <button class="menu-btn" id="menuBtn" aria-label="Open menu">☰ Menu</button>
+    </div>
+  </div>
+</header>
+
+<!-- MOBILE DRAWER -->
+<div class="mobile-nav" id="mobileNav">
+  <button class="close" id="closeBtn" aria-label="Close menu">✕</button>
+  <a href="#events">Events</a>
+  <a href="#register">Register</a>
+  <a href="#tickets">QR Tickets</a>
+  <a href="#vendors">Vendors</a>
+  <a href="#merch">Merch</a>
+  <a href="#contact">Contact</a>
+  <a href="#register" class="cta">Register Now</a>
+</div>
+
+<!-- HERO -->
+<section class="hero" id="top">
+  <div class="wrap hero-grid">
+    <div>
+      <div class="eyebrow">United Fridays · Last Friday Every Month</div>
+      <h1 class="display">More Than A Brand.<span>A Movement.</span></h1>
+      <p class="sub">Orlando's car community runs on real builds, late nights, and respect for the spot. Invite-only showcases, monthly street meets, vendors and collabs — all under one banner. Less hate, more stance.</p>
+      <div class="hero-cta">
+        <a href="#events" class="btn btn-gold">View Upcoming Events</a>
+        <a href="#register" class="btn btn-ghost">Register Your Build</a>
+      </div>
+      <div class="hero-stats">
+        <div class="s"><b>Est. 2012</b><span>Built in Orlando</span></div>
+        <div class="s"><b>9.7K+</b><span>Followers</span></div>
+        <div class="s"><b>Monthly</b><span>United Fridays</span></div>
+      </div>
+    </div>
+    <div class="pass-stage">
+      <div class="pass">
+        <div class="pass-top">
+          <div class="l">United We Stance</div>
+          <div class="pass-tier">VIP ENTRY</div>
+        </div>
+        <div class="pass-body">
+          <div class="pass-row"><span>Event</span><span>United Fridays</span></div>
+          <div class="pass-row"><span>Attendee</span><span>Your Name</span></div>
+          <div class="pass-row"><span>Build</span><span>05 350Z</span></div>
+          <div class="pass-row"><span>Status</span><span style="color:var(--green)">Approved</span></div>
+          <div class="qr" id="heroQr"></div>
+        </div>
+        <div class="pass-notch"></div>
+        <div class="pass-foot">Scan at entry · #UWS-2026-0417</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- MARQUEE -->
+<div class="marquee" aria-hidden="true">
+  <div class="track">
+    <span>United Fridays</span><b>★</b><span>Last Friday Every Month</span><b>★</b><span>#lesshatemorestance</span><b>★</b><span>Orlando, FL</span><b>★</b><span>Invite Only</span><b>★</b>
+    <span>United Fridays</span><b>★</b><span>Last Friday Every Month</span><b>★</b><span>#lesshatemorestance</span><b>★</b><span>Orlando, FL</span><b>★</b><span>Invite Only</span><b>★</b>
+  </div>
+</div>
+
+<!-- EVENTS -->
+<section class="section" id="events">
+  <div class="wrap">
+    <div class="sec-head">
+      <div class="eyebrow">What's Coming</div>
+      <h2 class="display">Upcoming Events</h2>
+      <p>From open monthly meets to curated invite-only showcases. Pick your lane and lock your spot.</p>
+    </div>
+    <span class="sample-flag">Sample Pricing — placeholders for client review</span>
+    <div class="cards">
+      <article class="card">
+        <div class="card-banner b1"><span class="pill pill-open">Open Registration</span></div>
+        <div class="card-body">
+          <div class="card-meta">Last Friday · Orlando, FL</div>
+          <h3>United Fridays</h3>
+          <p>The monthly anchor meet. Good cars, good people, good vibes. Roll in, park clean, and link with the community that started it all.</p>
+          <div class="card-price"><b>$10</b><small>Spectator · $25 registered vehicle</small></div>
+          <button class="btn btn-gold btn-block" data-event="United Fridays" data-tier="Spectator Pass" data-price="10">Register / Get Pass</button>
+        </div>
+      </article>
+      <article class="card">
+        <div class="card-banner b2"><span class="pill pill-invite">Invite Only</span></div>
+        <div class="card-body">
+          <div class="card-meta">Approval Required · Curated</div>
+          <h3>Invite Only Showcase</h3>
+          <p>Curated builds only. Submit your car, get reviewed by the team, and earn your spot in the room. Strictly approved entries.</p>
+          <div class="card-price"><b>$40</b><small>VIP / priority entry</small></div>
+          <button class="btn btn-ghost btn-block" data-event="Invite Only Showcase" data-tier="VIP / Priority Entry" data-price="40">Submit Build</button>
+        </div>
+      </article>
+      <article class="card">
+        <div class="card-banner b3"><span class="pill pill-apply">Apply to Vend</span></div>
+        <div class="card-body">
+          <div class="card-meta">Booths · Brand Collabs · Media</div>
+          <h3>Vendor / Sponsor Night</h3>
+          <p>Booths, brand activations, and full media coverage. Put your brand in front of Orlando's most active car crowd.</p>
+          <div class="card-price"><b>$75+</b><small>Booth · sponsor custom</small></div>
+          <button class="btn btn-ghost btn-block" data-event="Vendor / Sponsor Night" data-tier="Vendor Booth" data-price="75">Apply to Vend</button>
+        </div>
+      </article>
+    </div>
+  </div>
+</section>
+
+<!-- REGISTER -->
+<section class="section section--alt" id="register">
+  <div class="wrap">
+    <div class="sec-head">
+      <div class="eyebrow">Lock Your Spot</div>
+      <h2 class="display">Event Registration</h2>
+      <p>Tell us who's pulling up and what you're bringing. Approved builds get a QR pass sent straight to their phone.</p>
+    </div>
+    <div class="form-card">
+      <div id="formView">
+        <div class="frow">
+          <div class="field"><label>Full Name</label><input id="fName" type="text" placeholder="First & Last"/></div>
+          <div class="field"><label>Instagram Handle</label><input type="text" placeholder="@yourhandle"/></div>
+        </div>
+        <div class="frow">
+          <div class="field"><label>Email</label><input type="email" placeholder="you@email.com"/></div>
+          <div class="field"><label>Phone Number</label><input type="tel" placeholder="(407) 000-0000"/></div>
+        </div>
+        <div class="frow">
+          <div class="field"><label>Event</label>
+            <select id="fEvent">
+              <option>United Fridays</option>
+              <option>Invite Only Showcase</option>
+              <option>Vendor / Sponsor Night</option>
+            </select>
+          </div>
+          <div class="field"><label>Attendee Type</label>
+            <select>
+              <option>Spectator</option>
+              <option>Registered Vehicle</option>
+              <option>Vendor</option>
+              <option>Sponsor</option>
+              <option>Media</option>
+            </select>
+          </div>
+        </div>
+        <div class="frow">
+          <div class="field"><label>Vehicle Year</label><input id="fYear" type="text" placeholder="2005"/></div>
+          <div class="field"><label>Vehicle Make</label><input id="fMake" type="text" placeholder="Nissan"/></div>
+        </div>
+        <div class="frow">
+          <div class="field"><label>Vehicle Model</label><input id="fModel" type="text" placeholder="350Z"/></div>
+          <div class="field"><label>Vehicle Color</label><input type="text" placeholder="Pearl White"/></div>
+        </div>
+        <div class="frow">
+          <div class="field full"><label>Build / Mods Description</label><textarea placeholder="Coilovers, wheels, exhaust, carbon... tell us what makes it yours."></textarea></div>
+        </div>
+        <div class="frow">
+          <div class="field full"><label>Upload Car Photo</label>
+            <div class="upload" onclick="this.querySelector('span').textContent='car-photo.jpg · ready to upload'">
+              📷 <span>Tap to upload a photo of your build (JPG / PNG)</span>
+            </div>
+          </div>
+        </div>
+        <div class="frow">
+          <div class="field full"><label>Notes / Special Requests</label><textarea placeholder="Rolling with a crew? Parking together? Let us know."></textarea></div>
+        </div>
+        <label class="check"><input type="checkbox" id="fAgree"/><span>I agree to the event rules, refund policy, and waiver/release. No burnouts, no loud revving, respect the spot and each other.</span></label>
+        <button class="btn btn-gold btn-block" id="submitReg">Submit Registration</button>
+        <p class="form-note">Submitting adds your build to the review queue. In the final build, invite-only entries would be confirmed by the team before payment.</p>
+        <div class="legal-row">
+          <a href="#policies">Event Rules</a>
+          <a href="#policies">Refund Policy</a>
+          <a href="#policies">Waiver / Release</a>
+          <a href="#policies">Privacy Policy</a>
+          <a href="#policies">Terms</a>
+        </div>
+      </div>
+
+      <div class="confirm" id="confirmView">
+        <div class="ico">✓</div>
+        <h3>Registration Received</h3>
+        <p>You're in the queue for <b id="cEvent">United Fridays</b>. In the live build, the team would review builds within 24–48 hours, and an approval plus a QR pass can be sent by text and email.</p>
+        <div class="hero-cta" style="justify-content:center">
+          <a href="#tickets" class="btn btn-gold" id="viewTicket">View My Pass</a>
+          <button class="btn btn-ghost" id="resetReg">Register Another Build</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PAYMENT -->
+<section class="section" id="payment">
+  <div class="wrap">
+    <div class="sec-head">
+      <div class="eyebrow">Pricing</div>
+      <h2 class="display">Passes & Payment</h2>
+      <p>Pick a tier to build your checkout. Tap a pass and the cart updates instantly.</p>
+    </div>
+    <span class="sample-flag">Example Pricing — final tiers set by United We Stance</span>
+    <div class="tiers" id="tiers">
+      <div class="tier" data-name="Spectator Pass" data-price="10"><div class="tn">Spectator Pass</div><div class="tp">$10</div></div>
+      <div class="tier active" data-name="Registered Vehicle" data-price="25"><span class="tag">Most Popular</span><div class="tn">Registered Vehicle</div><div class="tp">$25</div></div>
+      <div class="tier" data-name="VIP / Priority Entry" data-price="40"><div class="tn">VIP / Priority Entry</div><div class="tp">$40</div></div>
+      <div class="tier" data-name="Vendor Booth" data-price="75"><div class="tn">Vendor Booth</div><div class="tp">$75+</div></div>
+      <div class="tier" data-name="Sponsor Package" data-price="0"><div class="tn">Sponsor Package</div><div class="tp" style="font-size:1.1rem;padding:11px 0">Custom</div></div>
+    </div>
+    <div class="two">
+      <div class="vendor-grid" style="margin:0">
+        <div class="vcard"><div class="vi">🎟️</div><h4>One pass, one scan</h4><p>Every paid or approved entry would get a unique QR. No paper, no list-hunting at the gate.</p></div>
+        <div class="vcard"><div class="vi">🔒</div><h4>Secure by design</h4><p>The final build would process payments through trusted providers, so card details stay off your servers.</p></div>
+        <div class="vcard"><div class="vi">↩️</div><h4>Clear refund policy</h4><p>The refund window would be shown at checkout and tied to each event's terms up front.</p></div>
+        <div class="vcard"><div class="vi">📱</div><h4>Straight to your phone</h4><p>Once confirmed, a pass can be sent by text and email automatically.</p></div>
+      </div>
+      <div class="checkout">
+        <h3>Your Checkout</h3>
+        <div class="co-row"><span>Event</span><span id="coEvent">United Fridays</span></div>
+        <div class="co-row"><span>Pass Type</span><span id="coTier">Registered Vehicle</span></div>
+        <div class="co-row"><span>Processing</span><span>$1.50</span></div>
+        <div class="co-total"><span>Total</span><b id="coTotal">$26.50</b></div>
+        <button class="btn btn-gold btn-block" id="payBtn">Pay Securely</button>
+        <div class="pay-state" id="payState">⚡ Demo only — no real charge. In the final build, Stripe / Square checkout would open here.</div>
+        <p class="pay-note">Sample pricing shown. Payments would be connected through Stripe, Square, or another approved provider once the workflow is confirmed.</p>
+      </div>
+    </div>
+    <div class="demo-note">
+      <span class="di">⚡</span>
+      <span><b>Demo flow.</b> No real payment is processed here. The final build would connect to <b>Stripe or Square</b> for live checkout, send <b>email + text confirmations</b>, and issue passes through a real QR system.</span>
+    </div>
+  </div>
+</section>
+
+<!-- QR TICKETS -->
+<section class="section section--alt" id="tickets">
+  <div class="wrap">
+    <div class="sec-head">
+      <div class="eyebrow">Entry, Handled</div>
+      <h2 class="display">QR Tickets</h2>
+      <p>From registration to the front gate in five clean steps. No clipboards, no confusion.</p>
+    </div>
+    <div class="steps" style="margin-bottom:48px">
+      <div class="step"><div class="num">1</div><h4>Register</h4><p>Sign up for the event and submit your build.</p></div>
+      <div class="step"><div class="num">2</div><h4>Pay or Approve</h4><p>Pay online, or get approved for invite-only.</p></div>
+      <div class="step"><div class="num">3</div><h4>Get Your QR</h4><p>A pass can be emailed and texted automatically.</p></div>
+      <div class="step"><div class="num">4</div><h4>Staff Scans</h4><p>Show your code at the entry. Quick scan.</p></div>
+      <div class="step"><div class="num">5</div><h4>Checked In</h4><p>You're marked in and rolling to the spot.</p></div>
+    </div>
+    <div class="two">
+      <div>
+        <h3 class="display" style="font-size:1.7rem;margin-bottom:14px">Sample QR Pass</h3>
+        <p style="color:var(--muted);margin-bottom:18px">This is the pass an attendee would receive once approved and paid. It updates with their name, build, and a unique ticket ID. Submit the form above and it generates right here.</p>
+        <div class="cap" style="margin-bottom:10px"><span class="dot"></span> Unique ticket ID per attendee</div>
+        <div class="cap" style="margin-bottom:10px"><span class="dot"></span> Status locked to Approved + Paid</div>
+        <div class="cap"><span class="dot"></span> Can be re-sent by text or email in the final build</div>
+        <div class="demo-note" style="margin-top:20px">
+          <span class="di">📲</span>
+          <span><b>Demo QR shown.</b> This sample code isn't scannable. The final build would generate real, unique QR codes with live <b>check-in / check-out</b> scanning at the gate.</span>
+        </div>
+      </div>
+      <div class="pass-stage">
+        <div class="pass" style="transform:none">
+          <div class="pass-top">
+            <div class="l">United We Stance</div>
+            <div class="pass-tier" id="tkTier">REGISTERED</div>
+          </div>
+          <div class="pass-body">
+            <div class="pass-row"><span>Event</span><span id="tkEvent">United Fridays</span></div>
+            <div class="pass-row"><span>Attendee</span><span id="tkName">Guest Entry</span></div>
+            <div class="pass-row"><span>Vehicle</span><span id="tkCar">—</span></div>
+            <div class="pass-row"><span>Status</span><span style="color:var(--green)">Approved</span></div>
+            <div class="qr" id="ticketQr"></div>
+          </div>
+          <div class="pass-notch"></div>
+          <div class="pass-foot" id="tkId">Ticket ID · #UWS-2026-0417</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- INVITE WORKFLOW -->
+<section class="section" id="invite">
+  <div class="wrap">
+    <div class="sec-head">
+      <div class="eyebrow">Curated Entry</div>
+      <h2 class="display">Invite-Only Approval</h2>
+      <p>Our showcases are curated. Here's exactly how a build goes from submission to a confirmed spot in the room.</p>
+    </div>
+    <div class="steps">
+      <div class="step"><div class="num">1</div><h4>Submit Build</h4><p>Drop your photos, specs, and mods through registration.</p></div>
+      <div class="step"><div class="num">2</div><h4>Team Reviews</h4><p>The UWS team reviews the vehicle and the fit for the event.</p></div>
+      <div class="step"><div class="num">3</div><h4>Approval or Waitlist</h4><p>You get an approval or a waitlist spot — no ghosting.</p></div>
+      <div class="step"><div class="num">4</div><h4>Payment Confirmed</h4><p>Approved entries complete payment to lock the slot.</p></div>
+      <div class="step"><div class="num">5</div><h4>QR Issued</h4><p>Your pass is issued and sent. You're officially in.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- ADMIN -->
+<section class="section section--alt" id="admin">
+  <div class="wrap">
+    <div class="sec-head">
+      <div class="eyebrow">For The Team</div>
+      <h2 class="display">Event Staff Dashboard</h2>
+      <p>Everything the crew needs to run the gate and manage the night — a preview of the admin side.</p>
+    </div>
+    <span class="sample-flag">Sample Data — mockup of the team dashboard</span>
+    <div class="caps">
+      <div class="cap"><span class="dot"></span> View registrations</div>
+      <div class="cap"><span class="dot"></span> Approve / deny builds</div>
+      <div class="cap"><span class="dot"></span> Track paid / unpaid</div>
+      <div class="cap"><span class="dot"></span> Scan QR tickets</div>
+      <div class="cap"><span class="dot"></span> Mark checked in</div>
+      <div class="cap"><span class="dot"></span> Export guest list</div>
+      <div class="cap"><span class="dot"></span> Vendor / sponsor apps</div>
+    </div>
+    <div class="dash">
+      <div class="dash-head">
+        <h3>Next United Fridays Event</h3>
+        <span class="live">Sample Data · 142 registered</span>
+      </div>
+      <div class="tbl-scroll">
+        <table>
+          <thead><tr><th>Attendee</th><th>Vehicle</th><th>Pass</th><th>Payment</th><th>Approval</th><th>Check-In</th></tr></thead>
+          <tbody>
+            <tr><td>Marcus D.<span class="car">@boostedmarc</span></td><td>2005 350Z<span class="car">Pearl White</span></td><td>VIP</td><td><span class="s-pill s-paid">Paid</span></td><td><span class="s-pill s-appr">Approved</span></td><td><span class="s-pill s-in">Checked In</span></td></tr>
+            <tr><td>Alyssa R.<span class="car">@lowkey.civic</span></td><td>2007 Civic EX<span class="car">Champagne</span></td><td>Registered</td><td><span class="s-pill s-paid">Paid</span></td><td><span class="s-pill s-appr">Approved</span></td><td><span class="s-pill s-no">Pending</span></td></tr>
+            <tr><td>Devon K.<span class="car">@k20.devon</span></td><td>2016 BMW M4<span class="car">Alpine White</span></td><td>VIP</td><td><span class="s-pill s-unpaid">Unpaid</span></td><td><span class="s-pill s-appr">Approved</span></td><td><span class="s-pill s-no">Pending</span></td></tr>
+            <tr><td>Priya N.<span class="car">@stancedporsche</span></td><td>1998 911<span class="car">Black</span></td><td>Registered</td><td><span class="s-pill s-paid">Paid</span></td><td><span class="s-pill s-wait">Waitlist</span></td><td><span class="s-pill s-no">Pending</span></td></tr>
+            <tr><td>Cosmo Tires<span class="car">@cosmotires</span></td><td>Vendor Booth<span class="car">10x10 setup</span></td><td>Vendor</td><td><span class="s-pill s-paid">Paid</span></td><td><span class="s-pill s-appr">Approved</span></td><td><span class="s-pill s-in">Checked In</span></td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- VENDORS -->
+<section class="section" id="vendors">
+  <div class="wrap">
+    <div class="sec-head">
+      <div class="eyebrow">Partner With UWS</div>
+      <h2 class="display">Vendors & Sponsors</h2>
+      <p>Put your brand in front of Orlando's most active car community. Booths, packages, collabs, and full coverage.</p>
+    </div>
+    <div class="vendor-grid">
+      <div class="vcard"><div class="vi">🏷️</div><h4>Vendor Booths</h4><p>Reserved space to sell, demo, and connect with attendees all night.</p></div>
+      <div class="vcard"><div class="vi">⭐</div><h4>Sponsor Packages</h4><p>Tiered visibility from banner placement to title sponsorship.</p></div>
+      <div class="vcard"><div class="vi">🤝</div><h4>Brand Collabs</h4><p>Co-hosted meets and limited drops built with your team.</p></div>
+      <div class="vcard"><div class="vi">🎥</div><h4>Media Coverage</h4><p>Photo and video recaps that put your activation in the feed.</p></div>
+      <div class="vcard"><div class="vi">🚀</div><h4>Product Activations</h4><p>Launch and demo new products in front of a buying crowd.</p></div>
+    </div>
+    <button class="btn btn-gold" data-event="Vendor / Sponsor Night" data-tier="Vendor Booth" data-price="75">Apply as Vendor / Sponsor</button>
+  </div>
+</section>
+
+<!-- MERCH -->
+<section class="section section--alt" id="merch">
+  <div class="wrap">
+    <div class="merch">
+      <div class="mt">
+        <div class="eyebrow">The Brand</div>
+        <h3 style="margin-top:10px">Merch & Drops</h3>
+        <p>Your existing store at <b style="color:var(--gold)">unitedwestance.bigcartel.com</b> can stay connected — keep selling where your community already shops while featuring event drops and limited runs right alongside registration.</p>
+        <div class="tags"><span>BigCartel connected</span><span>Shopify</span><span>Square</span><span>Event drops</span></div>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:10px;min-width:210px">
+        <a href="https://unitedwestance.bigcartel.com" target="_blank" rel="noopener" class="btn btn-gold">Shop Merch</a>
+        <a href="https://unitedwestance.bigcartel.com" target="_blank" rel="noopener" class="btn btn-ghost">Connect BigCartel Store</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section class="section" id="contact">
+  <div class="wrap contact">
+    <div class="eyebrow">Let's Build</div>
+    <h2 class="display">Want To Host, Vend,<br/>Sponsor, Or Collab?</h2>
+    <p style="color:var(--muted)">The movement grows on collabs. Pull up, link with the team, and let's put something together for Orlando.</p>
+    <div class="hero-cta" style="justify-content:center;margin-top:8px">
+      <a href="#contactForm" class="btn btn-gold">Contact The Team</a>
+      <a href="https://instagram.com/unitedwe_stance" target="_blank" rel="noopener" class="btn btn-ghost">DM @unitedwe_stance</a>
+    </div>
+    <div class="links">
+      <span>📍 Orlando, FL</span>
+      <a href="https://instagram.com/unitedwe_stance" target="_blank" rel="noopener">@unitedwe_stance</a>
+      <span>#lesshatemorestance</span>
+    </div>
+
+    <div class="contact-form" id="contactForm">
+      <div id="contactView">
+        <div class="frow">
+          <div class="field"><label>Name</label><input id="ctName" type="text" placeholder="Your name"/></div>
+          <div class="field"><label>Instagram or Email</label><input type="text" placeholder="@handle / you@email.com"/></div>
+        </div>
+        <div class="field" style="margin-bottom:14px"><label>I want to</label>
+          <select><option>Host an event</option><option>Vend a booth</option><option>Sponsor</option><option>Collab / join the team</option><option>Something else</option></select>
+        </div>
+        <div class="field" style="margin-bottom:16px"><label>Message</label><textarea placeholder="Tell us what you've got in mind."></textarea></div>
+        <button class="btn btn-gold btn-block" id="ctSend">Send Message</button>
+        <p class="form-note" style="text-align:center">Demo form — in the final build this would send straight to the UWS inbox.</p>
+      </div>
+      <div class="contact-confirm" id="contactConfirm">✓ Message ready to send. In the live site, this would reach the United We Stance team directly.</div>
+    </div>
+  </div>
+</section>
+
+<!-- POLICIES -->
+<section class="section section--alt" id="policies" style="padding-block:64px">
+  <div class="wrap">
+    <div class="sec-head" style="margin-bottom:26px">
+      <div class="eyebrow">The Fine Print</div>
+      <h2 class="display" style="font-size:clamp(1.7rem,4.5vw,2.4rem)">Policies & Agreements</h2>
+      <p>Placeholder pages for the documents every attendee agrees to. Final copy would be supplied by United We Stance.</p>
+    </div>
+    <div class="legal-row">
+      <a href="#policies">Event Rules</a>
+      <a href="#policies">Refund Policy</a>
+      <a href="#policies">Privacy Policy</a>
+      <a href="#policies">Terms of Service</a>
+      <a href="#policies">Waiver / Release of Liability</a>
+    </div>
+    <p class="form-note" style="margin-top:16px">These link to placeholders in this demo. The live site would host full, finalized policy pages.</p>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="wrap">
+    <div class="foot-grid">
+      <a class="brand" href="#top">
+        <div class="mark">UWS</div>
+        <div>
+          <div class="bt">United We Stance</div>
+          <div class="bs">Orlando, Florida · Est. 2012</div>
+        </div>
+      </a>
+      <nav class="foot-links">
+        <a href="#events">Events</a>
+        <a href="#register">Registration</a>
+        <a href="#vendors">Vendors</a>
+        <a href="#merch">Merch</a>
+        <a href="#contact">Contact</a>
+        <a href="#policies">Rules</a>
+        <a href="#policies">Refunds</a>
+        <a href="#policies">Privacy</a>
+        <a href="#policies">Terms</a>
+        <a href="#policies">Waiver</a>
+      </nav>
+    </div>
+    <p class="disclaimer">Prototype concept — sample pricing, payments, and QR system shown for demo purposes only. The final build would connect live Stripe/Square payments, email + text confirmations, and a real QR check-in system. More than a brand. We a movement. · #lesshatemorestance</p>
+  </div>
+</footer>
+
+<script>
+  // ---- Fake-but-convincing QR generator (deterministic per seed) ----
+  function buildQr(el, seed){
+    if(!el) return;
+    el.innerHTML='';
+    let s = 0; for(let i=0;i<seed.length;i++){ s = (s*31 + seed.charCodeAt(i)) >>> 0; }
+    const rand = ()=>{ s = (s*1103515245 + 12345) & 0x7fffffff; return s/0x7fffffff; };
+    const N = 11;
+    const finder = (r,c)=> (r<3&&c<3) || (r<3&&c>7) || (r>7&&c<3); // 3 corners
+    for(let r=0;r<N;r++){
+      for(let c=0;c<N;c++){
+        const cell = document.createElement('i');
+        let on;
+        if(finder(r,c)){
+          const inB = (r===0||r===2||c===0||c===2||(r>7&&(r===8||r===10))||(c>7&&(c===8||c===10)));
+          // draw a clean finder square ring + center
+          const lr = r>7? r-8 : r, lc = c>7? c-8 : c;
+          on = (lr===0||lr===2||lc===0||lc===2||(lr===1&&lc===1));
+        } else {
+          on = rand() > .5;
+        }
+        if(!on) cell.classList.add('off');
+        el.appendChild(cell);
+      }
+    }
+  }
+  buildQr(document.getElementById('heroQr'),'UWS-HERO-0417');
+  buildQr(document.getElementById('ticketQr'),'UWS-2026-0417');
+
+  // ---- Event card CTAs -> prefill + scroll to register ----
+  document.querySelectorAll('[data-event]').forEach(b=>{
+    b.addEventListener('click',()=>{
+      const ev = b.getAttribute('data-event');
+      const tier = b.getAttribute('data-tier');
+      const price = b.getAttribute('data-price');
+      const sel = document.getElementById('fEvent');
+      if(sel){ [...sel.options].forEach(o=>{ if(o.value===ev) sel.value=ev; }); }
+      setTier(tier, price, ev);
+      document.getElementById('register').scrollIntoView({behavior:'smooth'});
+    });
+  });
+
+  // ---- Payment tiers ----
+  const tierEls = document.querySelectorAll('.tier');
+  function money(n){ return '$'+ (Math.round(n*100)/100).toFixed(2); }
+  function setTier(name, price, ev){
+    tierEls.forEach(t=>{
+      t.classList.toggle('active', t.dataset.name===name);
+    });
+    document.getElementById('coTier').textContent = name;
+    if(ev) document.getElementById('coEvent').textContent = ev;
+    const p = parseFloat(price)||0;
+    if(name==='Sponsor Package'){
+      document.getElementById('coTotal').textContent = 'Custom';
+    } else {
+      document.getElementById('coTotal').textContent = money(p + 1.5);
+    }
+    // reflect on ticket
+    document.getElementById('tkTier').textContent = name.toUpperCase().replace(' / ',' ').split(' ').slice(0,2).join(' ');
+  }
+  tierEls.forEach(t=>{
+    t.addEventListener('click',()=> setTier(t.dataset.name, t.dataset.price, document.getElementById('coEvent').textContent));
+  });
+
+  // ---- Pay button mock ----
+  document.getElementById('payBtn').addEventListener('click',()=>{
+    document.getElementById('payState').classList.add('show');
+  });
+
+  // ---- Registration submit ----
+  document.getElementById('submitReg').addEventListener('click',()=>{
+    const agree = document.getElementById('fAgree');
+    if(!agree.checked){
+      agree.parentElement.style.color = 'var(--red)';
+      return;
+    }
+    const name = (document.getElementById('fName').value||'').trim() || 'Your Name';
+    const ev = document.getElementById('fEvent').value;
+    const yr = (document.getElementById('fYear').value||'').trim();
+    const mk = (document.getElementById('fMake').value||'').trim();
+    const md = (document.getElementById('fModel').value||'').trim();
+    const car = [yr,mk,md].filter(Boolean).join(' ') || 'Build TBD';
+
+    // build ticket
+    document.getElementById('tkName').textContent = name;
+    document.getElementById('tkEvent').textContent = ev;
+    document.getElementById('tkCar').textContent = car;
+    document.getElementById('cEvent').textContent = ev;
+    document.getElementById('coEvent').textContent = ev;
+    const id = '#UWS-2026-' + Math.floor(1000+Math.random()*8999);
+    document.getElementById('tkId').textContent = 'Ticket ID · ' + id;
+    buildQr(document.getElementById('ticketQr'), name + ev + id);
+
+    document.getElementById('formView').style.display = 'none';
+    document.getElementById('confirmView').classList.add('show');
+  });
+
+  document.getElementById('resetReg').addEventListener('click',()=>{
+    document.getElementById('confirmView').classList.remove('show');
+    document.getElementById('formView').style.display = 'block';
+    document.getElementById('formView').scrollIntoView({behavior:'smooth'});
+  });
+
+  // ---- Mobile menu ----
+  const mobileNav = document.getElementById('mobileNav');
+  const openNav = ()=> mobileNav.classList.add('open');
+  const closeNav = ()=> mobileNav.classList.remove('open');
+  document.getElementById('menuBtn').addEventListener('click', openNav);
+  document.getElementById('closeBtn').addEventListener('click', closeNav);
+  mobileNav.querySelectorAll('a').forEach(a=> a.addEventListener('click', closeNav));
+
+  // ---- Contact form ----
+  document.getElementById('ctSend').addEventListener('click',()=>{
+    document.getElementById('contactView').style.display='none';
+    document.getElementById('contactConfirm').classList.add('show');
+  });
+</script>
+</body>
+</html>
